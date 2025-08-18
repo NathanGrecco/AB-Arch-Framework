@@ -1,0 +1,5 @@
+# TODO ajustar conforme a configuração do seu ambiente
+vault:
+  authentication: TOKEN
+  server: 'http://vault.autbank.net'
+  token: 's.S1iqDHoxqSjAu459obgCEHe1'

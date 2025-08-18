@@ -1,0 +1,141 @@
+openapi: 3.0.1
+
+info:
+  title: API Broker
+  description: API responsavel por receber o dinheiro da conta da Plataforma enviado pelo Banco.
+  version: 0.0.1
+  contact:
+    name: "Autbank"
+    url: "http://www.autbank.com.br/"
+    email: "contato@autbank.com.br"
+
+tags:
+  - name: DinheiroAssegurado
+    description: Agrega endpoint de movimentação de dinheiros assegurado
+
+paths:
+  "/secured/send-money":
+    post:
+      summary: Envia dinheiro
+      description: Dados necessários para enviar o dinheiro para a o exterior
+      operationId: enviaDinheiro
+      security:
+        - microservice_auth:
+            - TF_002_SENDMONEY:POST
+      tags:
+        - DinheiroAssegurado
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CadastrarEnvioBroker'
+      responses:
+        200:
+          description: "Valor enviado com sucesso!"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetornoEnvioBrokerDto'
+        400:
+          description: "Erro de validação ou de negócio"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+
+components:
+  schemas:
+
+    CadastrarEnvioBroker:
+      type: object
+      properties:
+        idRemessa:
+          type: integer
+          format: int64
+          title: "Identificador"
+          description: "Identificador unico da remessa"
+          example: 10
+          x-validation:
+            min:
+              value: 1
+              errorCode: 30001
+              defaultMessage: "ID da remessa deve ser maior que zero"
+        valor:
+          type: number
+          title: "Valor da transição"
+          description: "Valor da transição vindo do banco para o exterior"
+          example: "5000.00"
+          x-validation:
+            min:
+              value: 0.01
+              errorCode: 30002
+              defaultMessage: "Valor deve ser maior que zero"
+      required:
+        - idRemessa
+        - valor
+
+    RetornoEnvioBrokerDto:
+      type: object
+      properties:
+        idRemessa:
+          type: integer
+          format: int64
+          title: "Identificador"
+          description: "Identificador unico da remessa"
+          example: 10
+          x-validation:
+            min:
+              value: 1
+              errorCode: 30010
+              defaultMessage: "ID da remessa deve ser maior que zero"
+        valor:
+          type: number
+          title: "Valor da transição"
+          description: "Valor da transição vindo do banco para o exterior"
+          example: "5000.00"
+          x-validation:
+            min:
+              value: 0.01
+              errorCode: 30011
+              defaultMessage: "Valor deve ser maior que zero"
+      required:
+        - idRemessa
+        - valor
+
+    Erro:
+      type: object
+      properties:
+        codigo:
+          type: integer
+          format: int64
+          title: "Código"
+          description: "Código de identificação do erro"
+          example: "99"
+          x-validation:
+            min:
+              value: 1
+              errorCode: 30020
+              defaultMessage: "Código do erro deve ser maior que zero"
+        mensagem:
+          type: string
+          title: "Mensagem"
+          description: "Mensagem do erro"
+          example: "CPF inválido"
+          x-validation:
+            size:
+              value: 255
+              errorCode: 30021
+              defaultMessage: "Mensagem do erro excede tamanho máximo permitido"
+      required:
+        - codigo
+        - mensagem
+
+  securitySchemes:
+    microservice_auth:
+      type: "oauth2"
+      flows:
+        clientCredentials:
+          tokenUrl: "/proxy/oauth/token"
+          scopes:
+            "TF_002_SENDMONEY:POST": Permissao para envirar dados ao servico

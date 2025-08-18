@@ -1,0 +1,360 @@
+openapi: 3.0.1
+
+info:
+  title: API Banco
+  description: API responsavel por gerir as transferencia bancarias
+  version: 0.0.1
+  contact:
+    name: "Autbank"
+    url: "http://www.autbank.com.br/"
+    email: "contato@autbank.com.br"
+
+tags:
+  - name: Transferencia
+    description: Agrega endpoints de transferencias no banco
+
+paths:
+  "/secured/envios-exterior":
+    post:
+      summary: Cadastra o evio exterior
+      description: Registra a trasnferencia para o exterior baseado na remessa
+      operationId: cadastraEnvioExterior
+      security:
+        - microservice_auth:
+            - TF_001_ENVIOSEXTERIOR:POST
+      tags:
+        - Transferencia
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DadosEnvioExterior'
+      responses:
+        200:
+          description: "Envio exterior feito com sucesso!"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetornoEnvioExteriorDto'
+        400:
+          description: "Erro de validação ou de negócio"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+
+  "/secured/envios-exterior/{idRemessa}":
+    patch:
+      summary: Atualiza Status
+      description: Atualiza Status da transferência por id remessa
+      operationId: atualizaStatusTransferencia
+      security:
+        - microservice_auth:
+            - TF_001_ENVIOSEXTERIOR:PATCH
+      tags:
+        - Transferencia
+      parameters:
+        - name: idRemessa
+          in: path
+          description: "Ientificador da remessa"
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DadosAtualizaEnvioExterior'
+      responses:
+        204:
+          description: "Status atualizado com sucesso"
+        400:
+          description: "Erro de validação ou de negócio"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+
+  "/transferencias":
+    post:
+      summary: Cadastra a transferência
+      description: Cadastra as Trasnferências do usuario
+      operationId: cadastraTransferencia
+      tags:
+        - Transferencia
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DadosTransferenciaBancaria'
+      responses:
+        201:
+          description: "Transferência cadastrada com sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetornoTransferenciaBancariaDto'
+        400:
+          description: "Erro de validação ou de negócio"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+
+
+components:
+  schemas:
+    DadosEnvioExterior:
+      type: object
+      properties:
+        idRemessa:
+          type: integer
+          format: int64
+          title: "Identificador"
+          description: "Identificador unico da remessa"
+          example: 10
+          x-validation:
+            min:
+              value: 1
+              errorCode: 20001
+              defaultMessage: "ID da remessa deve ser maior que zero"
+        valor:
+          type: number
+          title: "Valor da transição"
+          description: "Valor da transição vindo do banco para o exterior"
+          example: "5000.00"
+          x-validation:
+            min:
+              value: 0.01
+              errorCode: 20002
+              defaultMessage: "Valor deve ser maior que zero"
+        status:
+          type: string
+          title: "Status da transferencia"
+          description: "Status de atualização da transferencia bancaria"
+          example: "FINALIZADA"
+          x-validation:
+            enum:
+              value: ["FINALIZADA", "PENDENTE", "CANCELADA", "ERRO"]
+              errorCode: 20003
+              defaultMessage: "Status inválido"
+      required:
+        - idRemessa
+        - valor
+        - status
+
+    RetornoEnvioExteriorDto:
+      type: object
+      properties:
+        idRemessa:
+          type: integer
+          format: int64
+          title: "Identificador"
+          description: "Identificador unico da remessa"
+          example: 10
+          x-validation:
+            min:
+              value: 1
+              errorCode: 20010
+              defaultMessage: "ID da remessa deve ser maior que zero"
+        valor:
+          type: number
+          title: "Valor da transição"
+          description: "Valor da transição vindo do banco para o exterior"
+          example: "5000.00"
+          x-validation:
+            min:
+              value: 0.01
+              errorCode: 20011
+              defaultMessage: "Valor deve ser maior que zero"
+        status:
+          type: string
+          title: "Status da transferencia"
+          description: "Status de atualização da transferencia bancaria"
+          example: "FINALIZADA"
+          x-validation:
+            enum:
+              value: ["FINALIZADA", "PENDENTE", "CANCELADA", "ERRO"]
+              errorCode: 20012
+              defaultMessage: "Status inválido"
+      required:
+        - idRemessa
+        - valor
+        - status
+
+    DadosTransferenciaBancaria:
+      type: object
+      properties:
+        idRemessa:
+          type: integer
+          format: int64
+          title: "Identificador"
+          description: "Identificador unico da remessa"
+          example: 10
+          x-validation:
+            min:
+              value: 1
+              errorCode: 20020
+              defaultMessage: "ID da remessa deve ser maior que zero"
+        valor:
+          type: number
+          title: "Valor da transição"
+          description: "Valor da transição vindo do banco para o exterior"
+          example: "5000.00"
+          x-validation:
+            min:
+              value: 0.01
+              errorCode: 20021
+              defaultMessage: "Valor deve ser maior que zero"
+        titularDeb:
+          type: string
+          title: "Titular"
+          description: "Titular de debito"
+          example: "Nathan Grecco"
+        nroContaDeb:
+          type: string
+          title: "Numero da Conta Debito"
+          description: "Numero da Conta Debito do usuario"
+          example: 12398745
+        titularCred:
+          type: string
+          title: "Titular"
+          description: "Titular de Crédito"
+          example: "Plataforma"
+        nroContaCred:
+          type: string
+          title: "Numero da Conta Credito"
+          description: "Numero da Conta Credito do usuario"
+          example: 99999999
+      required:
+        - idRemessa
+        - valor
+        - titularDeb
+        - nroContaDeb
+        - titularCred
+        - nroContaCred
+
+    RetornoTransferenciaBancariaDto:
+      type: object
+      properties:
+        idRemessa:
+          type: integer
+          format: int64
+          title: "Identificador"
+          description: "Identificador unico da remessa"
+          example: 10
+          x-validation:
+            min:
+              value: 1
+              errorCode: 20030
+              defaultMessage: "ID da remessa deve ser maior que zero"
+        valor:
+          type: number
+          title: "Valor da transição"
+          description: "Valor da transição vindo do banco para o exterior"
+          example: "5000.00"
+          x-validation:
+            min:
+              value: 0.01
+              errorCode: 20031
+              defaultMessage: "Valor deve ser maior que zero"
+        titularDeb:
+          type: string
+          title: "Titular"
+          description: "Titular de debito"
+          example: "DEB"
+          x-validation:
+            size:
+              value: 100
+              errorCode: 20032
+              defaultMessage: "Nome do titular de débito muito longo"
+        nroContaDeb:
+          type: integer
+          title: "Numero da Conta Debito"
+          description: "Numero da Conta Debito do usuario"
+          example: 13254867
+          x-validation:
+            min:
+              value: 1
+              errorCode: 20033
+              defaultMessage: "Número da conta de débito inválido"
+        titularCred:
+          type: string
+          title: "Titular"
+          description: "Titular de Crédito"
+          example: "CRED"
+          x-validation:
+            size:
+              value: 100
+              errorCode: 20034
+              defaultMessage: "Nome do titular de crédito muito longo"
+        nroContaCred:
+          type: integer
+          title: "Numero da Conta Credito"
+          description: "Numero da Conta Credito do usuario"
+          example: 13254867
+          x-validation:
+            min:
+              value: 1
+              errorCode: 20035
+              defaultMessage: "Número da conta de crédito inválido"
+      required:
+        - idRemessa
+        - valor
+        - titularDeb
+        - nroContaDeb
+        - titularCred
+        - nroContaCred
+
+    DadosAtualizaEnvioExterior:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "Status para definir no envio exterior da remessa atribuida"
+          example: "Liberado"
+      required:
+        - status
+
+    Erro:
+      type: object
+      properties:
+        codigo:
+          type: integer
+          format: int64
+          title: "Código"
+          description: "Código de identificação do erro"
+          example: "99"
+          x-validation:
+            min:
+              value: 1
+              errorCode: 20040
+              defaultMessage: "Código deve ser maior que zero"
+        mensagem:
+          type: string
+          title: "Mensagem"
+          description: "Mensagem do erro"
+          example: "CPF inválido"
+          x-validation:
+            size:
+              value: 255
+              errorCode: 20041
+              defaultMessage: "Mensagem excede tamanho permitido"
+      required:
+        - codigo
+        - mensagem
+
+  securitySchemes:
+    microservice_auth:
+      type: "oauth2"
+      flows:
+        clientCredentials:
+          tokenUrl: "/proxy/oauth/token"
+          scopes:
+            "TF_001_ENVIOSEXTERIOR:POST": Permissao para envirar dados ao servico
+            "TF_001_ENVIOSEXTERIOR:PATCH": Permissao para troca um valor especifico

@@ -1,0 +1,271 @@
+openapi: 3.0.1
+info:
+  title: API Remessa
+  description: API responsavel por gerir informações da remessa
+  version: 0.0.1
+  contact:
+    name: "Autbank"
+    url: "http://www.autbank.com.br/"
+    email: "contato@autbank.com.br"
+
+tags:
+  - name: Remessa
+    description: Agrega endpoints de remessa
+
+paths:
+  "/remessas/simulacao":
+    get:
+      summary: Simulação da remessa
+      description: Retorna resultado da simulação da remessa
+      operationId: simularRemessa
+      tags:
+        - Remessa
+      parameters:
+        - in: query
+          name: valor
+          schema:
+            type: number
+            minimum: 1
+            multipleOf: 0.01
+          required: true
+          description: Valor da simulação
+      responses:
+        200:
+          description: Simulação feita com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RetornoSimulacaoRemessaDto"
+        400:
+          description: Erro de validação ou de negócio
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+
+  "/remessas":
+    post:
+      summary: Criar remessa
+      description: Operação para criar a remessa
+      operationId: criarRemessa
+      tags:
+        - Remessa
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                valor:
+                  type: number
+                  example: 300.00
+                  title: "Valor"
+                  description: "Valor da simulação"
+                  exclusiveMinimum: true
+                  minimum: 1
+                  multipleOf: 0.01
+              required:
+                - valor
+      responses:
+        200:
+          description: Remessa criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RetornoCriacaoRemessaDto"
+        400:
+          description: Erro de validação ou de negócio
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+
+  "/remessas/{idRemessa}":
+    get:
+      summary: Retornar status
+      description: Retorna o status da remessa
+      operationId: retornaStatusRemessaPorId
+      tags:
+        - Remessa
+      parameters:
+        - name: idRemessa
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID da remessa
+      responses:
+        200:
+          description: Status Recebido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetornoStatusRemessaDto'
+        400:
+          description: Erro de validação ou de negócio
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+
+components:
+  schemas:
+    Erro:
+      type: object
+      properties:
+        codigo:
+          type: integer
+          format: int64
+          example: 99
+          x-validation:
+            min:
+              value: 1
+              errorCode: 10001
+              defaultMessage: "Código deve ser maior que zero"
+        mensagem:
+          type: string
+          example: "CPF inválido"
+          x-validation:
+            size:
+              value: 255
+              errorCode: 10002
+              defaultMessage: "Mensagem excede tamanho máximo permitido"
+      required:
+        - codigo
+        - mensagem
+
+    RetornoSimulacaoRemessaDto:
+      type: object
+      properties:
+        valor:
+          type: number
+          example: 5000.00
+          x-validation:
+            min:
+              value: 0.01
+              errorCode: 10010
+              defaultMessage: "Valor deve ser maior que zero"
+        valorEnvio:
+          type: number
+          example: 50.00
+          x-validation:
+            min:
+              value: 0.01
+              errorCode: 10011
+              defaultMessage: "Valor de envio deve ser maior que zero"
+        taxaCambio:
+          type: number
+          example: 5.00
+          x-validation:
+            min:
+              value: 0.01
+              errorCode: 10012
+              defaultMessage: "Taxa de câmbio deve ser maior que zero"
+      required:
+        - valor
+        - valorEnvio
+        - taxaCambio
+
+    RetornoStatusRemessaDto:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "CRIADA"
+          x-validation:
+            enum:
+              value: ["CRIADA", "PENDENTE", "PROCESSADA", "ERRO"]
+              errorCode: 10020
+              defaultMessage: "Status inválido"
+
+    RetornoCriacaoRemessaDto:
+      type: object
+      properties:
+        DadosRemessa:
+          $ref: '#/components/schemas/DadosRemessa'
+        DadosPagamento:
+          $ref: '#/components/schemas/DadosPagamento'
+
+    DadosRemessa:
+      type: object
+      properties:
+        idRemessa:
+          type: integer
+          format: int64
+          example: 1
+          x-validation:
+            min:
+              value: 1
+              errorCode: 10030
+              defaultMessage: "ID da remessa deve ser maior que zero"
+        valor:
+          type: number
+          example: 5000.00
+          x-validation:
+            min:
+              value: 0.01
+              errorCode: 10031
+              defaultMessage: "Valor deve ser maior que zero"
+        valorEnvio:
+          type: number
+          example: 50.00
+          x-validation:
+            min:
+              value: 0.01
+              errorCode: 10032
+              defaultMessage: "Valor de envio deve ser maior que zero"
+        taxaCambio:
+          type: number
+          example: 5.00
+          x-validation:
+            min:
+              value: 0.01
+              errorCode: 10033
+              defaultMessage: "Taxa de câmbio deve ser maior que zero"
+        valorPago:
+          type: number
+          example: 100.00
+          x-validation:
+            min:
+              value: 0.01
+              errorCode: 10034
+              defaultMessage: "Valor pago deve ser maior que zero"
+      required:
+        - idRemessa
+        - valor
+        - valorPago
+        - valorEnvio
+        - taxaCambio
+
+    DadosPagamento:
+      type: object
+      properties:
+        nomeBanco:
+          type: string
+          description: Nome do Banco [valor fixo]
+          enum: ["Autbank"]
+          example: "Autbank"
+          x-validation:
+            enum:
+              value: ["Autbank"]
+              errorCode: 10040
+              defaultMessage: "Nome do banco inválido"
+        nroContaBanco:
+          type: string
+          description: Número da conta do banco (valor fixo)
+          enum: ["000123-4"]
+          example: "000123-4"
+          x-validation:
+            enum:
+              value: ["000123-4"]
+              errorCode: 10041
+              defaultMessage: "Número da conta inválido"
+        valor:
+          type: number
+          x-validation:
+            min:
+              value: 0.01
+              errorCode: 10042
+              defaultMessage: "Valor do pagamento deve ser maior que zero"

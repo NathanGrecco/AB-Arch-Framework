@@ -1,0 +1,4 @@
+arch:
+  app.name: api-tf-modulith
+ds:
+  auto.configuration.enabled: false

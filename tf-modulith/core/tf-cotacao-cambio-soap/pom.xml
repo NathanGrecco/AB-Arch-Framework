@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>br.com.autbank.tf</groupId>
+        <artifactId>core</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>tf-cotacao-cambio-soap</artifactId>
+    <properties>
+        <arch.codegen.modelPackage>br.com.autbank.tf.tf.cotacao.cambio.soap.models</arch.codegen.modelPackage>
+        <arch.codegen.controllerPackage>br.com.autbank.tf.tf.cotacao.cambio.soap.controllers</arch.codegen.controllerPackage>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>arch.micronaut</groupId>
+            <artifactId>wsdl</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.swagger.codegen.v3</groupId>
+                <artifactId>swagger-codegen-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>com.sun.xml.ws</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>wsdl-calculator</id>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                        <configuration>
+                            <keep>true</keep>
+                            <verbose>true</verbose>
+                            <encoding>UTF-8</encoding>
+                            <packageName>br.com.autbank.tf.tf.cotacao.cambio.soap</packageName>
+                            <wsdlDirectory>${project.basedir}/src/main/resources/wsdl</wsdlDirectory>
+                            <wsdlLocation>/wsdl/cotacoesCambio.wsdl</wsdlLocation>
+                            <wsdlFiles>
+                                <wsdlFile>cotacoesCambio.wsdl</wsdlFile>
+                            </wsdlFiles>
+                            <bindingDirectory>.</bindingDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

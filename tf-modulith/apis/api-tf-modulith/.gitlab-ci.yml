@@ -1,0 +1,27 @@
+Generate Dockerfile api-tf-modulith:
+  extends: Generate Dockerfile
+  variables:
+    NOME_PROJETO: api-tf-modulith
+    BASE_DIR_MODULE: apis/api-tf-modulith
+    JAR_LOCATION: "apis/api-tf-modulith/target"
+    DOCKER_FILE_NAME: api-tf-modulith.dockerfile
+
+Push on Registry Local api-tf-modulith:
+  stage: Registry Deploy
+  extends: Push on Registry
+  variables:
+    NOME_PROJETO: api-tf-modulith
+    BASE_DIR_MODULE: apis/api-tf-modulith
+    ARTIFACT_LOCATION: apis/api-tf-modulith/target/
+    DOCKERFILE_NAME: api-tf-modulith.dockerfile
+  dependencies: [Generate Dockerfile api-tf-modulith]
+  needs: [Generate Dockerfile api-tf-modulith]
+
+Deploy Desenvolvimento api-tf-modulith:
+  stage: Helm Deploy
+  extends: Deploy Desenvolvimento
+  variables:
+    NOME_PROJETO: api-tf-modulith
+    BASE_DIR_MODULE: apis/api-tf-modulith
+    HELM_VALUES_FILE: ./apis/api-tf-modulith/kubernetes/values.yaml
+  needs: [Push on Registry Local api-tf-modulith]

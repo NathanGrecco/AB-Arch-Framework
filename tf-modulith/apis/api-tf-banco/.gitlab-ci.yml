@@ -1,0 +1,27 @@
+Generate Dockerfile api-tf-banco:
+  extends: Generate Dockerfile
+  variables:
+    NOME_PROJETO: api-tf-banco
+    BASE_DIR_MODULE: apis/api-tf-banco
+    JAR_LOCATION: "apis/api-tf-banco/target"
+    DOCKER_FILE_NAME: api-tf-banco.dockerfile
+
+Push on Registry Local api-tf-banco:
+  stage: Registry Deploy
+  extends: Push on Registry
+  variables:
+    NOME_PROJETO: api-tf-banco
+    BASE_DIR_MODULE: apis/api-tf-banco
+    ARTIFACT_LOCATION: apis/api-tf-banco/target/
+    DOCKERFILE_NAME: api-tf-banco.dockerfile
+  dependencies: [Generate Dockerfile api-tf-banco]
+  needs: [Generate Dockerfile api-tf-banco]
+
+Deploy Desenvolvimento api-tf-banco:
+  stage: Helm Deploy
+  extends: Deploy Desenvolvimento
+  variables:
+    NOME_PROJETO: api-tf-banco
+    BASE_DIR_MODULE: apis/api-tf-banco
+    HELM_VALUES_FILE: ./apis/api-tf-banco/kubernetes/values.yaml
+  needs: [Push on Registry Local api-tf-banco]

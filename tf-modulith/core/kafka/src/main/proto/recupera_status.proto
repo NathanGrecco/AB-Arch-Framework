@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option java_package = "br.com.autbank.kafka.proto";
+option java_outer_classname = "Protobuf";
+
+message ProtoRecuperaStatus {
+  int64 idRemessa = 1;
+  string status = 2;
+}

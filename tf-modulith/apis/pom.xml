@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>br.com.autbank.tf</groupId>
+        <artifactId>tf-modulith</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <packaging>pom</packaging>
+
+    <artifactId>apis</artifactId>
+
+    <modules>
+        <module>api-tf-remessa</module>
+        <module>api-tf-banco</module>
+        <module>api-tf-modulith</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>arch.micronaut</groupId>
+            <artifactId>microservice</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>arch.micronaut</groupId>
+            <artifactId>mssql-21</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>br.com.autbank.openapi.micronaut.aggregator</groupId>
+                <artifactId>openapi-micronaut-aggregator</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>br.com.autbank.utils</groupId>
+                <artifactId>cicd-generator-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>br.com.autbank.utils</groupId>
+                <artifactId>descritor-aplicacao-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

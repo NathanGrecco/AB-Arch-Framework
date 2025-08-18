@@ -1,0 +1,27 @@
+Generate Dockerfile api-tf-remessa:
+  extends: Generate Dockerfile
+  variables:
+    NOME_PROJETO: api-tf-remessa
+    BASE_DIR_MODULE: apis/api-tf-remessa
+    JAR_LOCATION: "apis/api-tf-remessa/target"
+    DOCKER_FILE_NAME: api-tf-remessa.dockerfile
+
+Push on Registry Local api-tf-remessa:
+  stage: Registry Deploy
+  extends: Push on Registry
+  variables:
+    NOME_PROJETO: api-tf-remessa
+    BASE_DIR_MODULE: apis/api-tf-remessa
+    ARTIFACT_LOCATION: apis/api-tf-remessa/target/
+    DOCKERFILE_NAME: api-tf-remessa.dockerfile
+  dependencies: [Generate Dockerfile api-tf-remessa]
+  needs: [Generate Dockerfile api-tf-remessa]
+
+Deploy Desenvolvimento api-tf-remessa:
+  stage: Helm Deploy
+  extends: Deploy Desenvolvimento
+  variables:
+    NOME_PROJETO: api-tf-remessa
+    BASE_DIR_MODULE: apis/api-tf-remessa
+    HELM_VALUES_FILE: ./apis/api-tf-remessa/kubernetes/values.yaml
+  needs: [Push on Registry Local api-tf-remessa]

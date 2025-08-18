@@ -1,0 +1,3 @@
+secrets:
+  paths: 'redis,oauth2'
+  root.path: 'secret/autbank/sistema/tf'

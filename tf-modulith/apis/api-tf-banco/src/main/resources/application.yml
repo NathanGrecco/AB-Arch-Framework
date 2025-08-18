@@ -1,0 +1,4 @@
+arch:
+  app.name: api-tf-banco
+  oauth2.default:
+    scopes: TF_002_SENDMONEY:POST

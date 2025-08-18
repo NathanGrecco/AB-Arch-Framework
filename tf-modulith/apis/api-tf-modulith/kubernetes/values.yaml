@@ -1,0 +1,15 @@
+appName: api-tf-modulith
+runtime: micronaut
+archetype: modulith
+
+image:
+  repository: registry.autbank.net/tf/api-tf-modulith
+
+env: |
+  - name: JAVA_OPTS
+    value: "-Xms64m"
+
+extensions:
+  opentelemetry:
+  cors:
+  istio:

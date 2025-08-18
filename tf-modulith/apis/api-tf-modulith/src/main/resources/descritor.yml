@@ -1,0 +1,48 @@
+app:
+  nome: tf-modulith
+  descricao: Aqui você descreve tudo sobre a sua aplicação
+  siglaSistema: tf
+  namespace: autbank-tf
+  integracoes:
+    infraestrutura:
+      - sqlserver
+      - redis
+      - kafka
+  bancodados:
+    gerarVariaveis: true # gera as variáveis do datasource com os clients automáticamente
+    bancos:
+      - nome: AB_BANCO_01
+        clients:
+         - DEFAULT
+  kafka:
+    - topico: S1_EXEMPLO_TOPICO
+      descricao: Tópico do Kafka responsável pelo processamento de autorizações
+      tipos:
+        - Producer
+    - topico: S2_EXEMPLO_TOPICO
+      descricao: Tópico do Kafka responsável pelo processamento de autorizações
+      tipos:
+        - Producer
+        - Consumer
+  preReqsGlobais:
+    condicoesBanco:
+      - 'É necessário ter a tabela <code>TABELA_UM</code> criada e populada.'
+      - 'É necessário ter a tabela <code>TABELA_DOIS</code> criada.'
+  preReqsServicos:
+    - endpoint: '/endpoint-um GET'
+      detalhes:
+        variaveis:
+          - VARIAVEL_DO_GET
+          - VARIAVEL_CONDICAO_DO_GET
+        tabelas:
+          - Para utilizar esse endpoint, é necessário ter a tabela <code>TABELA_DO_GET</code> criada e populada no banco.
+          - Aqui você pode especificar tabelas que são necessárias para subir a API.
+        sistemas:
+          - nomeSistema: 'SISTEMA_B'
+            servicos:
+              - 'servicoGetB: Serviço que traz os valores necessários do SISTEMA_B para esta API.'
+              - 'nomeDoServiço: Descrição do serviço'
+            escopos:
+              - 'S2_001_EXEMPLO_ESCOPO:POST'
+            condicoes:
+              - 'Aqui você pode especificar algumas condições para que o endpoint funcione, por exemplo, ter um serviço de envio de SMS funcionando.'

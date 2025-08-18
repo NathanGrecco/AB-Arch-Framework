@@ -1,0 +1,49 @@
+server.port: "8946"
+
+ds:
+  default:
+    url: "jdbc:sqlserver://localhost;databaseName=TF_BANCO;sendStringParametersAsUnicode=false;encrypt=false;"
+    user: 'sa'
+    password: 'autbank'
+
+arch:
+  #CACHE
+  cache:
+    redis:
+      nodes: "redis://140.2.15.50"
+  #OAUTH
+  oauth2.default:
+    server: "http://authorization.autbank.net/oauth/token"
+  #JWT
+  security.jwt:
+    algorithm: RS256
+    public.key: "-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqUfEtueD3DrItZsFYMp2
+OOz4g4k2Cs6kll8E3+I5d/nzbCnHSfBjDB3Iv7QTonX5y+AHqfghd7LbAdVqMntZ
+lrVhsI2JvN3OclCuvv7J4snnZHOC/76NgvSQS6+rfvU5W//GfFYfX0nk2o4nsfYy
+pV+LaoxHQocfhMq91UIiBcbwGnMAl9CgcA+ooBNhugeQxk1JCamlhVjHsuLbX/Cn
+ZNgO5k2TPcYaiPtgRTAvfkYZKd38G7rGSSiphmhXMCxw2P0zeExP5INywZcwiXnK
+2Ix+l8XKg2d1oafRLnWe3Qc0LiqFv/Ews25PDCIBEq4/ing2B1jC8ehN45PCfEoG
+1wIDAQAB
+-----END PUBLIC KEY-----"
+
+  #KAFKA
+  messaging:
+    kafka:
+      sasl:
+        user: admin
+        password: kafka
+      bootstrap.servers: "140.2.15.25:9092"
+      security.protocol: "SASL_PLAINTEXT"
+      subscriber:
+        instanceid:
+          enable: false
+          suffix: ""
+        messaging.kafka.consumer:
+          max.poll:
+            records: 100
+            interval.ms: 300000
+          session.timeout.ms: 45000
+          request.timeout.ms: 30000
+
+management.port: "-1"
