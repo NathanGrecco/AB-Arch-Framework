@@ -31,6 +31,7 @@ public class SchedulerService {
         log.info("[SCHEDULER] - Dinheiro Enviado ao broker: {}", LocalDateTime.now());
         envioExteriorList.forEach(i -> enviaStatusKafka(i.getIdRemessa()));
         log.info("[SCHEDULER] - Status enviado ao tópico: {}", LocalDateTime.now());
+        envioExteriorList.forEach(i -> alteraStatusEnvioExteriorProcessado(i.getIdRemessa()));
     }
 
     private void enviaStatusKafka(Long idRemessa) {

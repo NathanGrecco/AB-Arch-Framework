@@ -4,6 +4,7 @@ import arch.common.config.Config;
 import br.com.autbank.tf.core.tf.banco.model.EnvioExterior;
 import br.com.autbank.tf.core.tf.banco.model.StatusEnvioExterior;
 import jakarta.inject.Named;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -14,6 +15,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Named
+@Slf4j
 public class EnvioExteriorRepository {
 
     private final JdbcTemplate jdbcTemplate;

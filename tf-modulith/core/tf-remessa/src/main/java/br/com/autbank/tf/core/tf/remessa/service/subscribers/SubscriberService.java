@@ -3,15 +3,12 @@ package br.com.autbank.tf.core.tf.remessa.service.subscribers;
 import arch.context.annotation.Bean;
 import arch.context.annotation.Factory;
 import arch.messaging.provider.kafka.subscription.KafkaSubscription;
-import arch.messaging.provider.subscriber.SubscriberMessage;
-import arch.messaging.provider.subscriber.pipeline.single.SubscriberMessageSingleHandler;
 import br.com.autbank.kafka.proto.Protobuf;
 import br.com.autbank.tf.core.tf.remessa.service.AtualizaStatusEnvioExterior;
 import br.com.autbank.tf.core.tf.remessa.service.AtualizaStatusRemessaService;
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 
@@ -39,7 +36,9 @@ public class SubscriberService {
                     log.info("Mensagem recebida do Kafka: idRemessa={} status={}", idRemessa, status);
 
                     atualizaStatusRemessaService.atualizaStatusRemessa(idRemessa, status);
-                    atualizaStatusEnvioExterior.atualizaStatus(idRemessa);
+                    if (status.equals("Paga")) {
+                        atualizaStatusEnvioExterior.atualizaStatus(idRemessa);
+                    }
 
                 })
                 .configurer(properties -> {

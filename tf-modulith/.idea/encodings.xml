@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/../api-tf-broker/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../api-tf-broker/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/apis/api-tf-banco/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/apis/api-tf-banco/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/apis/api-tf-modulith/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/apis/api-tf-modulith/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/apis/api-tf-remessa/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/apis/api-tf-remessa/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/apis/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/apis/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/core/kafka/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/core/kafka/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/core/tf-banco/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/core/tf-banco/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/core/tf-cotacao-cambio-soap/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/core/tf-cotacao-cambio-soap/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/core/tf-remessa/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/core/tf-remessa/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+  </component>
+</project>
